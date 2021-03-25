@@ -15,7 +15,8 @@
  */
 
 resource "aws_iam_policy" "kubernetes_connect" {
-  name = "kubernetes.connect"
+  count = var.create_predefined_policies == true ? 1 : 0
+  name  = "kubernetes.connect"
 
   policy = <<EOF
 {
@@ -35,7 +36,8 @@ EOF
 }
 
 resource "aws_iam_policy" "logging_read" {
-  name        = "logging.read"
+  count = var.create_predefined_policies == true ? 1 : 0
+  name  = "logging.read"
 
   policy = <<EOF
 {
@@ -56,7 +58,8 @@ EOF
 }
 
 resource "aws_iam_policy" "logging_write" {
-  name        = "logging.write"
+  count = var.create_predefined_policies == true ? 1 : 0
+  name  = "logging.write"
 
   policy = <<EOF
 {
@@ -79,6 +82,7 @@ EOF
 }
 
 resource "aws_iam_policy" "serverless_deploy" {
+  count  = var.create_predefined_policies == true ? 1 : 0
   name   = "serverless.deploy"
   policy = data.aws_iam_policy_document.serverless_deploy.json
 }
@@ -139,13 +143,12 @@ data "aws_iam_policy_document" "serverless_deploy" {
 }
 
 resource "aws_iam_policy" "cicd_secrets_read" {
-  count  = var.cicd_secrets_path != "" ? 1 : 0
+  count  = var.create_predefined_policies == true && var.cicd_secrets_path != "" ? 1 : 0
   name   = "cicd.secrets.read"
   policy = data.aws_iam_policy_document.cicd_secrets_read.json
 }
 
 data "aws_iam_policy_document" "cicd_secrets_read" {
-
   statement {
     actions = [
       "ssm:DescribeParameters",
@@ -171,7 +174,7 @@ data "aws_iam_policy_document" "cicd_secrets_read" {
 }
 
 resource "aws_iam_policy" "cicd_secrets_write" {
-  count  = var.cicd_secrets_path != "" ? 1 : 0
+  count  = var.create_predefined_policies == true && var.cicd_secrets_path != "" ? 1 : 0
   name   = "cicd.secrets.write"
   policy = data.aws_iam_policy_document.cicd_secrets_write.json
 }
@@ -206,7 +209,7 @@ data "aws_iam_policy_document" "cicd_secrets_write" {
 }
 
 resource "aws_iam_policy" "cdn_publish" {
-  count  = var.shared_cdn_bucket != "" ? 1 : 0
+  count  = var.create_predefined_policies == true && var.shared_cdn_bucket != "" ? 1 : 0
   name   = "cdn.publish"
   policy = data.aws_iam_policy_document.cdn_publish.json
 }

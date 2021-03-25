@@ -17,9 +17,11 @@ module "admin" {
   users               = yamldecode(file("${path.root}/../infra.yaml"))["users"]
   roles               = yamldecode(file("${path.root}/../infra.yaml"))["roles"]
 
-  cicd_secrets_path   = "/cicd/"
-  shared_cdn_bucket   = "shared-cdn"
-  shared_state_bucket = "shared-terraform"
+  # For predefined policies
+  create_predefined_policies = true
+  cicd_secrets_path          = "/cicd/"
+  shared_cdn_bucket          = "shared-cdn"
+  shared_state_bucket        = "shared-terraform"
 }
 ```
 
@@ -36,16 +38,16 @@ groups:
       - "arn:aws:iam::56789012345:role/developer"
 
 users:
-  - name: "john.doe"
+  - name: john.doe
     groups: [ "developers" ]
-  - name: "jane.doe"
+  - name: jane.doe
     groups: [ "developers" ]
 
 roles:
-  - name: "cicd"
+  - name: cicd
     policies: [ "serverless.deploy", "cicd.secrets.read" ]
     services: [ "ec2.amazonaws.com" ]
-  - name: "logging"
+  - name: logging
     policies: [ "logging.write" ]
     services: [ "ec2.amazonaws.com" ]
 ```

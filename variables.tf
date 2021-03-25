@@ -37,6 +37,12 @@ variable "shared_cdn_bucket" {
   description = "Unique name for the shared bucket used to store public static assets of different projects"
 }
 
+variable "create_predefined_policies" {
+  type = bool
+  default = true
+  description = "If true, a set of predefined policies are created (see policies.tf)."
+}
+
 variable "groups" {
   type = list(object({
     name = string
