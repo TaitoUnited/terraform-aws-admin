@@ -16,21 +16,25 @@
 
 variable "account_id" {
   type = string
+  description = "AWS account id"
 }
 
 variable "cicd_secrets_path" {
   type = string
   default = ""
+  description = "Unique path used to store CI/CD secrets"
 }
 
 variable "shared_state_bucket" {
   type = string
   default = ""
+  description = "Unique name for the shared bucket used to store Terraform state of different projects"
 }
 
 variable "shared_cdn_bucket" {
   type = string
   default = ""
+  description = "Unique name for the shared bucket used to store public static assets of different projects"
 }
 
 variable "groups" {
