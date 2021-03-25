@@ -19,6 +19,7 @@ module "admin" {
 
   # For predefined policies
   create_predefined_policies = true
+  predefined_policy_prefix   = ""
   cicd_secrets_path          = "/cicd/"
   shared_cdn_bucket          = "shared-cdn"
   shared_state_bucket        = "shared-terraform"

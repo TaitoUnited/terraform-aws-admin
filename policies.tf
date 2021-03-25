@@ -16,7 +16,7 @@
 
 resource "aws_iam_policy" "kubernetes_connect" {
   count = var.create_predefined_policies == true ? 1 : 0
-  name  = "kubernetes.connect"
+  name  = "${var.predefined_policy_prefix}kubernetes.connect"
 
   policy = <<EOF
 {
@@ -37,7 +37,7 @@ EOF
 
 resource "aws_iam_policy" "logging_read" {
   count = var.create_predefined_policies == true ? 1 : 0
-  name  = "logging.read"
+  name  = "${var.predefined_policy_prefix}logging.read"
 
   policy = <<EOF
 {
@@ -59,7 +59,7 @@ EOF
 
 resource "aws_iam_policy" "logging_write" {
   count = var.create_predefined_policies == true ? 1 : 0
-  name  = "logging.write"
+  name  = "${var.predefined_policy_prefix}logging.write"
 
   policy = <<EOF
 {
@@ -83,7 +83,7 @@ EOF
 
 resource "aws_iam_policy" "serverless_deploy" {
   count  = var.create_predefined_policies == true ? 1 : 0
-  name   = "serverless.deploy"
+  name   = "${var.predefined_policy_prefix}serverless.deploy"
   policy = data.aws_iam_policy_document.serverless_deploy.json
 }
 
@@ -144,7 +144,7 @@ data "aws_iam_policy_document" "serverless_deploy" {
 
 resource "aws_iam_policy" "cicd_secrets_read" {
   count  = var.create_predefined_policies == true && var.cicd_secrets_path != "" ? 1 : 0
-  name   = "cicd.secrets.read"
+  name   = "${var.predefined_policy_prefix}cicd.secrets.read"
   policy = data.aws_iam_policy_document.cicd_secrets_read.json
 }
 
@@ -175,7 +175,7 @@ data "aws_iam_policy_document" "cicd_secrets_read" {
 
 resource "aws_iam_policy" "cicd_secrets_write" {
   count  = var.create_predefined_policies == true && var.cicd_secrets_path != "" ? 1 : 0
-  name   = "cicd.secrets.write"
+  name   = "${var.predefined_policy_prefix}cicd.secrets.write"
   policy = data.aws_iam_policy_document.cicd_secrets_write.json
 }
 
@@ -210,7 +210,7 @@ data "aws_iam_policy_document" "cicd_secrets_write" {
 
 resource "aws_iam_policy" "cdn_publish" {
   count  = var.create_predefined_policies == true && var.shared_cdn_bucket != "" ? 1 : 0
-  name   = "cdn.publish"
+  name   = "${var.predefined_policy_prefix}cdn.publish"
   policy = data.aws_iam_policy_document.cdn_publish.json
 }
 

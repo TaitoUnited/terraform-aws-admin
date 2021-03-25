@@ -19,30 +19,6 @@ variable "account_id" {
   description = "AWS account id"
 }
 
-variable "cicd_secrets_path" {
-  type = string
-  default = ""
-  description = "Unique path used to store CI/CD secrets"
-}
-
-variable "shared_state_bucket" {
-  type = string
-  default = ""
-  description = "Unique name for the shared bucket used to store Terraform state of different projects"
-}
-
-variable "shared_cdn_bucket" {
-  type = string
-  default = ""
-  description = "Unique name for the shared bucket used to store public static assets of different projects"
-}
-
-variable "create_predefined_policies" {
-  type = bool
-  default = true
-  description = "If true, a set of predefined policies are created (see policies.tf)."
-}
-
 variable "groups" {
   type = list(object({
     name = string
@@ -71,4 +47,36 @@ variable "roles" {
   }))
   default = []
   description = "Resources as JSON (see README.md). You can read values from a YAML file with yamldecode()."
+}
+
+# --- For predefined policies ---
+
+variable "create_predefined_policies" {
+  type = bool
+  default = true
+  description = "If true, a set of predefined policies are created (see policies.tf)."
+}
+
+variable "predefined_policy_prefix" {
+  type = string
+  default = ""
+  description = "Policy name prefix used to classify policies or avoid name conflicts."
+}
+
+variable "cicd_secrets_path" {
+  type = string
+  default = ""
+  description = "Unique path used to store CI/CD secrets"
+}
+
+variable "shared_state_bucket" {
+  type = string
+  default = ""
+  description = "Unique name for the shared bucket used to store Terraform state of different projects"
+}
+
+variable "shared_cdn_bucket" {
+  type = string
+  default = ""
+  description = "Unique name for the shared bucket used to store public static assets of different projects"
 }
