@@ -15,17 +15,29 @@
  */
 
 resource "aws_iam_user" "user" {
-  for_each = {for item in local.users: item.key => item}
-  name     = each.value.name
+  for_each   = {for item in local.users: item.key => item}
+  name       = each.value.name
 }
 
 resource "aws_iam_user_group_membership" "user_group" {
-  for_each = {for item in local.users: item.key => item}
-  user     = each.value.name
-  groups   = each.value.groups
+  depends_on = [ aws_iam_user.user, aws_iam_group.group ]
+  for_each   = {for item in local.users: item.key => item}
+  user       = each.value.name
+  groups     = each.value.groups
 }
 
 resource "aws_iam_user_policy_attachment" "user_policy" {
+  depends_on = [
+    aws_iam_user.user,
+    aws_iam_policy.kubernetes_connect,
+    aws_iam_policy.logging_read,
+    aws_iam_policy.logging_write,
+    aws_iam_policy.serverless_deploy,
+    aws_iam_policy.cicd_secrets_read,
+    aws_iam_policy.cicd_secrets_write,
+    aws_iam_policy.cdn_publish
+  ]
+
   for_each   = {for item in local.userPolicies: item.key => item}
   user       = each.value.user.name
   policy_arn = each.value.policyArn

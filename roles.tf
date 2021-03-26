@@ -22,6 +22,17 @@ resource "aws_iam_role" "role" {
 }
 
 resource "aws_iam_role_policy_attachment" "role_policy" {
+  depends_on = [
+    aws_iam_role.role,
+    aws_iam_policy.kubernetes_connect,
+    aws_iam_policy.logging_read,
+    aws_iam_policy.logging_write,
+    aws_iam_policy.serverless_deploy,
+    aws_iam_policy.cicd_secrets_read,
+    aws_iam_policy.cicd_secrets_write,
+    aws_iam_policy.cdn_publish
+  ]
+
   for_each   = {for item in local.rolePolicies: item.key => item}
   role       = each.value.role.name
   policy_arn = each.value.policyArn

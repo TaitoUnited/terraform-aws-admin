@@ -34,8 +34,6 @@ groups:
     path: /
     policies: [ "kubernetes.connect", "logging.read" ]
     assumeRoles:
-      # Members of the group are allowed to assume a role of an another account
-      # https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html
       - "arn:aws:iam::56789012345:role/developer"
 
 users:
@@ -57,6 +55,7 @@ YAML attributes:
 
 - See variables.tf for all the supported YAML attributes.
 - See policies.tf for all the predefined policies.
+- See [IAM Tutorial: Delegate access across AWS accounts using IAM roles](https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_cross-account-with-roles.html) on how to create separate development and production accounts and use assumeRoles to delegate access for users.
 
 Combine with the following modules to get a complete infrastructure defined by YAML:
 
