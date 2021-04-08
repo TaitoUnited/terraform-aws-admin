@@ -23,8 +23,8 @@ variable "groups" {
   type = list(object({
     name = string
     path = string
-    policies = list(string)
-    assumeRoles = list(string)
+    policies = optional(list(string))
+    assumeRoles = optional(list(string))
   }))
   default = []
   description = "Resources as JSON (see README.md). You can read values from a YAML file with yamldecode()."
@@ -33,7 +33,7 @@ variable "groups" {
 variable "users" {
   type = list(object({
     name = string
-    groups = list(string)
+    groups = optional(list(string))
   }))
   default = []
   description = "Resources as JSON (see README.md). You can read values from a YAML file with yamldecode()."
@@ -42,8 +42,8 @@ variable "users" {
 variable "roles" {
   type = list(object({
     name = string
-    policies = list(string)
-    services = list(string)
+    policies = optional(list(string))
+    services = optional(list(string))
   }))
   default = []
   description = "Resources as JSON (see README.md). You can read values from a YAML file with yamldecode()."

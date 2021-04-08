@@ -22,7 +22,7 @@ locals {
   roles = var.roles != null ? var.roles : []
 
   groupsWithAssumeRoles = [
-    for group in local.groups: group if length(try(group.assumeRoles, [])) > 0
+    for group in local.groups: group if length(coalesce(group.assumeRoles, [])) > 0
   ]
 
   groupPolicies = flatten([
