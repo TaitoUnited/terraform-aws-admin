@@ -15,7 +15,7 @@
  */
 
 resource "aws_iam_role" "role" {
-  for_each = {for item in local.roles: item.key => item}
+  for_each = {for item in local.roles: item.name => item}
   name     = each.value.name
 
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy[each.key].json
@@ -39,7 +39,7 @@ resource "aws_iam_role_policy_attachment" "role_policy" {
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
-  for_each = {for item in local.roles: item.key => item}
+  for_each = {for item in local.roles: item.name => item}
 
   statement {
     actions = ["sts:AssumeRole"]

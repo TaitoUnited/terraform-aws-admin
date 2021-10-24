@@ -34,6 +34,7 @@ variable "users" {
   type = list(object({
     name = string
     groups = optional(list(string))
+    policies = optional(list(string))
   }))
   default = []
   description = "Resources as JSON (see README.md). You can read values from a YAML file with yamldecode()."

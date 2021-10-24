@@ -15,13 +15,13 @@
  */
 
 resource "aws_iam_user" "user" {
-  for_each   = {for item in local.users: item.key => item}
+  for_each   = {for item in local.users: item.name => item}
   name       = each.value.name
 }
 
 resource "aws_iam_user_group_membership" "user_group" {
   depends_on = [ aws_iam_user.user, aws_iam_group.group ]
-  for_each   = {for item in local.users: item.key => item}
+  for_each   = {for item in local.users: item.name => item}
   user       = each.value.name
   groups     = each.value.groups
 }

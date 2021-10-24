@@ -15,7 +15,7 @@
  */
 
 resource "aws_iam_group" "group" {
-  for_each = {for item in local.groups: item.key => item}
+  for_each = {for item in local.groups: item.name => item}
   name     = each.value.name
   path     = each.value.path
 }
@@ -40,7 +40,7 @@ resource "aws_iam_group_policy_attachment" "group_policy" {
 resource "aws_iam_group_policy" "group_assume_role_policy" {
   depends_on = [ aws_iam_group.group, aws_iam_role.role ]
 
-  for_each   = {for item in local.groupsWithAssumeRoles: item.key => item}
+  for_each   = {for item in local.groupsWithAssumeRoles: item.name => item}
   name       = "${each.value.name}-assumes-roles"
   group      = each.value.name
 

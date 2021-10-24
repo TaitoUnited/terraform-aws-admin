@@ -27,7 +27,7 @@ locals {
 
   groupPolicies = flatten([
     for group in local.groups: [
-      for policy in group.policies:
+      for policy in (group.policies != null ? group.policies : []):
       {
         key  = "${group.name}-${policy}"
         group = group
@@ -38,7 +38,7 @@ locals {
 
   userPolicies = flatten([
     for user in local.users: [
-      for policy in user.policies:
+      for policy in (user.policies != null ? user.policies : []):
       {
         key  = "${user.name}-${policy}"
         user = user
@@ -49,7 +49,7 @@ locals {
 
   rolePolicies = flatten([
     for role in local.roles: [
-      for policy in role.policies:
+      for policy in (role.policies != null ? role.policies : []):
       {
         key  = "${role.name}-${policy}"
         role = role
