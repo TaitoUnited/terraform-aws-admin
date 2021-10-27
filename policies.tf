@@ -151,24 +151,15 @@ resource "aws_iam_policy" "cicd_secrets_read" {
 data "aws_iam_policy_document" "cicd_secrets_read" {
   statement {
     actions = [
-      "ssm:DescribeParameters",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:GetResourcePolicy",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds"
     ]
 
     resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    actions = [
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter"
-    ]
-
-    resources = [
-      # NOTE: removed ${var.region}
-      "arn:aws:ssm::${var.account_id}:parameter${var.cicd_secrets_path}*"
+      "arn:aws:secretsmanager::${var.account_id}:secret:${var.cicd_secrets_path}*"
     ]
   }
 }
@@ -182,28 +173,17 @@ resource "aws_iam_policy" "cicd_secrets_write" {
 data "aws_iam_policy_document" "cicd_secrets_write" {
   statement {
     actions = [
-      "ssm:DescribeParameters",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:CreateSecret",
+      "secretsmanager:UpdateSecret",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:RestoreSecret",
+      "secretsmanager:TagResource",
+      "secretsmanager:UntagResource",
     ]
 
     resources = [
-      "*"
-    ]
-  }
-
-  statement {
-    actions = [
-      "ssm:PutParameter",
-      "ssm:DeleteParameter",
-      "ssm:GetParameterHistory",
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter",
-      "ssm:DeleteParameters"
-    ]
-
-    resources = [
-      # NOTE: removed ${var.region}
-      "arn:aws:ssm::${var.account_id}:parameter${var.cicd_secrets_path}*"
+      "arn:aws:secretsmanager::${var.account_id}:secret:${var.cicd_secrets_path}*"
     ]
   }
 }
