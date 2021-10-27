@@ -125,6 +125,16 @@ data "aws_iam_policy_document" "serverless_deploy" {
   # Deploy services
   statement {
     actions = [
+      # Container registry
+      "ecr:GetAuthorizationToken",
+      "ecr:ListImages",
+      "ecr:DescribeImages",
+      "ecr:PutImage",
+      "ecr:InitiateLayerUpload",
+      "ecr:UploadLayerPart",
+      "ecr:CompleteLayerUpload",
+      "ecr:TagResource",
+
       "route53:CreateHealthCheck",
       "iam:PutRolePolicy",
       # TODO: Limit apigateway and lambda actions
@@ -184,7 +194,7 @@ data "aws_iam_policy_document" "serverless_deploy" {
 }
 
 resource "aws_iam_policy" "cicd_secrets_read" {
-  count  = var.create_predefined_policies == true && var.cicd_secrets_path != "" ? 1 : 0
+  count  = var.create_predefined_policies == true && var.cicd_secrets_path != null && var.cicd_secrets_path != "" ? 1 : 0
   name   = "${var.predefined_policy_prefix}cicd.secrets.read"
   policy = data.aws_iam_policy_document.cicd_secrets_read.json
 }
