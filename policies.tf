@@ -90,24 +90,44 @@ resource "aws_iam_policy" "serverless_deploy" {
 }
 
 data "aws_iam_policy_document" "serverless_deploy" {
+
+  # Environment info required on deployment (read-only)
   statement {
     actions = [
+      # Kubernetes
       "eks:DescribeCluster",
       "eks:ListClusters",
+
+      # DNS
       "route53:ListHostedZones",
       "route53:GetHostedZone",
       "route53:ListTagsForResource",
       "route53:ListResourceRecordSets",
       "route53:ChangeResourceRecordSets",
       "route53:GetChange",
-      "route53:CreateHealthCheck",
+
+      # Certificates
       "acm:ListCertificates",
       "acm:DescribeCertificate",
       "acm:ListTagsForCertificate",
+
+      # Roles
       "iam:GetRole",
       "iam:GetRolePolicy",
       "iam:ListAttachedRolePolicies",
+    ]
+
+    resources = [
+      "*"
+    ]
+  }
+
+  # Deploy services
+  statement {
+    actions = [
+      "route53:CreateHealthCheck",
       "iam:PutRolePolicy",
+      # TODO: Limit apigateway and lambda actions
       "apigateway:*",
       "lambda:*",
     ]
@@ -117,28 +137,47 @@ data "aws_iam_policy_document" "serverless_deploy" {
     ]
   }
 
+  # Save static assets to bucket
+  dynamic "statement" {
+    for_each = var.shared_static_assets_bucket != null ? [1] : []
+    content {
+      actions = [
+        # TODO: limit actions
+        "s3:*"
+      ]
+      resources = [
+        "arn:aws:s3:::${var.shared_static_assets_bucket}",
+        "arn:aws:s3:::${var.shared_static_assets_bucket}/*"
+      ]
+    }
+  }
+
+  # Save function package to bucket
+  dynamic "statement" {
+    for_each = var.shared_functions_bucket != null ? [1] : []
+    content {
+      actions = [
+        # TODO: limit actions
+        "s3:*"
+      ]
+      resources = [
+        "arn:aws:s3:::${var.shared_functions_bucket}",
+        "arn:aws:s3:::${var.shared_functions_bucket}/*"
+      ]
+    }
+  }
+
+  # Store terraform state to bucket
   dynamic "statement" {
     for_each = var.shared_state_bucket != null ? [1] : []
     content {
       actions = [
+        # TODO: limit actions
         "s3:*"
       ]
       resources = [
         "arn:aws:s3:::${var.shared_state_bucket}",
         "arn:aws:s3:::${var.shared_state_bucket}/*"
-      ]
-    }
-  }
-
-  dynamic "statement" {
-    for_each = var.shared_cdn_bucket != null ? [1] : []
-    content {
-      actions = [
-        "s3:*"
-      ]
-      resources = [
-        "arn:aws:s3:::${var.shared_cdn_bucket}",
-        "arn:aws:s3:::${var.shared_cdn_bucket}/*"
       ]
     }
   }
@@ -194,7 +233,7 @@ data "aws_iam_policy_document" "cicd_secrets_write" {
 
 /* TODO: not required?
 resource "aws_iam_policy" "cdn_publish" {
-  count  = var.create_predefined_policies == true && var.shared_cdn_bucket != "" ? 1 : 0
+  count  = var.create_predefined_policies == true && var.shared_static_assets_bucket != "" ? 1 : 0
   name   = "${var.predefined_policy_prefix}cdn.publish"
   policy = data.aws_iam_policy_document.cdn_publish.json
 }
@@ -206,8 +245,8 @@ data "aws_iam_policy_document" "cdn_publish" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.shared_cdn_bucket}",
-      "arn:aws:s3:::${var.shared_cdn_bucket}/*"
+      "arn:aws:s3:::${var.shared_static_assets_bucket}",
+      "arn:aws:s3:::${var.shared_static_assets_bucket}/*"
     ]
   }
 }

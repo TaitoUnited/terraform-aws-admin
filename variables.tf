@@ -70,14 +70,20 @@ variable "cicd_secrets_path" {
   description = "Unique path used to store CI/CD secrets"
 }
 
+variable "shared_static_assets_bucket" {
+  type = string
+  default = ""
+  description = "Unique name for the shared bucket used to store public static assets of different projects"
+}
+
+variable "shared_functions_bucket" {
+  type = string
+  default = ""
+  description = "Unique name for the shared bucket used to store function packages of different projects"
+}
+
 variable "shared_state_bucket" {
   type = string
   default = ""
   description = "Unique name for the shared bucket used to store Terraform state of different projects"
-}
-
-variable "shared_cdn_bucket" {
-  type = string
-  default = ""
-  description = "Unique name for the shared bucket used to store public static assets of different projects"
 }
