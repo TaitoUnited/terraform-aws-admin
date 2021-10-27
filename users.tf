@@ -30,12 +30,12 @@ resource "aws_iam_user_policy_attachment" "user_policy" {
   depends_on = [
     aws_iam_user.user,
     aws_iam_policy.kubernetes_connect,
-    aws_iam_policy.logging_read,
+    # aws_iam_policy.logging_read,
     aws_iam_policy.logging_write,
     aws_iam_policy.serverless_deploy,
     aws_iam_policy.cicd_secrets_read,
-    aws_iam_policy.cicd_secrets_write,
-    aws_iam_policy.cdn_publish
+    # aws_iam_policy.cicd_secrets_write,
+    # aws_iam_policy.cdn_publish
   ]
 
   for_each   = {for item in local.userPolicies: item.key => item}

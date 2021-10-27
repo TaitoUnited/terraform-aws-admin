@@ -29,10 +29,18 @@ module "admin" {
 Example YAML:
 
 ```
+roles:
+  - name: cicd
+    policies: [ "serverless.deploy", "cicd.secrets.read" ]
+    services: [ "ec2.amazonaws.com" ]
+  - name: logging
+    policies: [ "logging.write" ]
+    services: [ "ec2.amazonaws.com" ]
+
 groups:
   - name: developers
     path: /
-    policies: [ "kubernetes.connect", "logging.read" ]
+    policies: [ "kubernetes.connect", "CloudWatchLogsReadOnlyAccess" ]
     assumeRoles:
       - "arn:aws:iam::56789012345:role/developer"
 
@@ -41,14 +49,6 @@ users:
     groups: [ "developers" ]
   - name: jane.doe
     groups: [ "developers" ]
-
-roles:
-  - name: cicd
-    policies: [ "serverless.deploy", "cicd.secrets.read" ]
-    services: [ "ec2.amazonaws.com" ]
-  - name: logging
-    policies: [ "logging.write" ]
-    services: [ "ec2.amazonaws.com" ]
 ```
 
 YAML attributes:

@@ -24,12 +24,12 @@ resource "aws_iam_group_policy_attachment" "group_policy" {
   depends_on = [
     aws_iam_group.group,
     aws_iam_policy.kubernetes_connect,
-    aws_iam_policy.logging_read,
+    # aws_iam_policy.logging_read,
     aws_iam_policy.logging_write,
     aws_iam_policy.serverless_deploy,
     aws_iam_policy.cicd_secrets_read,
-    aws_iam_policy.cicd_secrets_write,
-    aws_iam_policy.cdn_publish
+    # aws_iam_policy.cicd_secrets_write,
+    # aws_iam_policy.cdn_publish
   ]
 
   for_each   = {for item in local.groupPolicies: item.key => item}

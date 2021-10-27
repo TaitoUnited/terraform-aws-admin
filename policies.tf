@@ -35,6 +35,7 @@ resource "aws_iam_policy" "kubernetes_connect" {
 EOF
 }
 
+/* TODO: not required?
 resource "aws_iam_policy" "logging_read" {
   count = var.create_predefined_policies == true ? 1 : 0
   name  = "${var.predefined_policy_prefix}logging.read"
@@ -56,6 +57,7 @@ resource "aws_iam_policy" "logging_read" {
 }
 EOF
 }
+*/
 
 resource "aws_iam_policy" "logging_write" {
   count = var.create_predefined_policies == true ? 1 : 0
@@ -164,6 +166,7 @@ data "aws_iam_policy_document" "cicd_secrets_read" {
   }
 }
 
+/* TODO: not required?
 resource "aws_iam_policy" "cicd_secrets_write" {
   count  = var.create_predefined_policies == true && var.cicd_secrets_path != "" ? 1 : 0
   name   = "${var.predefined_policy_prefix}cicd.secrets.write"
@@ -187,7 +190,9 @@ data "aws_iam_policy_document" "cicd_secrets_write" {
     ]
   }
 }
+*/
 
+/* TODO: not required?
 resource "aws_iam_policy" "cdn_publish" {
   count  = var.create_predefined_policies == true && var.shared_cdn_bucket != "" ? 1 : 0
   name   = "${var.predefined_policy_prefix}cdn.publish"
@@ -206,3 +211,4 @@ data "aws_iam_policy_document" "cdn_publish" {
     ]
   }
 }
+*/
